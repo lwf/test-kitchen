@@ -208,8 +208,12 @@ module Kitchen
     # Extra instances methods used for accessing Puppet data such as a run,
     # node attributes, etc.
     module Puppetlike
+      def hiera
+        suite.hiera
+      end
 
-      def manifest
+      def classes
+        suite.classes
       end
     end
 

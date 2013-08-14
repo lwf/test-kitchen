@@ -85,8 +85,12 @@ module Kitchen
 
     # Extra suite methods used for accessing Puppet data such as a manifest.
     module Puppetlike
+      def hiera
+        data[:hiera] || {}
+      end
 
-      def manifest
+      def classes
+        data[:classes]
       end
     end
 
