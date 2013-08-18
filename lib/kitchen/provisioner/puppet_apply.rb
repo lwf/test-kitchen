@@ -111,7 +111,7 @@ module Kitchen
 
         File.open(File.join(tmpdir, 'hieradata', 'base.yaml'), 'w') do |fh|
           fh.puts instance.hiera.
-            inject({}) { |acc, (k,v)| acc[k.to_s] = v; acc }.to_yaml
+            inject({}) { |acc, (k, v)| acc[k.to_s] = v; acc }.to_yaml
         end
 
         File.open(File.join(tmpdir, 'hiera.yaml'), 'w') do |fh|
@@ -168,7 +168,8 @@ module Kitchen
         Puppet::ModuleTool::ModulefileReader.evaluate(metadata, modulefile)
         module_name = metadata.name or raise(UserError,
           "The Modulefile does not define the 'name' key." +
-            " Please add: `name '<author>-<module_name>'` to Modulefile and retry")
+            " Please add: `name '<author>-<module_name>'`" +
+            " to Modulefile and retry")
 
         module_path = File.join(tmpmodule_dir, module_name)
         glob = Dir.glob("#{kitchen_root}/{Modulefile,README.*," +
@@ -189,7 +190,7 @@ module Kitchen
         FileUtils.rm(all_files - module_files)
       end
 
-      def module_files_glob 
+      def module_files_glob
         files = %w{README.* Modulefile
           manifests/**/* templates/**/* files/**/* lib/**/*}
 
@@ -207,7 +208,8 @@ module Kitchen
         rescue LoadError
           fatal("The `librarian-chef' gem is missing and must be installed." +
             " Run `gem install librarian-puppet` or add the following " +
-            "to your Gemfile if you are using Bundler: `gem 'librarian-puppet'`.")
+            "to your Gemfile if you are using Bundler: "+
+            "`gem 'librarian-puppet'`.")
           raise UserError, "Could not load Librarian-Puppet"
         end
 

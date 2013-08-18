@@ -43,7 +43,7 @@ module Kitchen
 
       def run_command ; end
 
-      def run_command_exit_codes; 
+      def run_command_exit_codes
         [0]
       end
 
