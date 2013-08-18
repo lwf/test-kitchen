@@ -106,7 +106,7 @@ module Kitchen
 
         File.open(File.join(tmpdir, 'hieradata', 'base.yaml'), 'w') do |fh|
           fh.puts instance.hiera.
-            inject({}) { |acc, (k,v)| acc[k.to_s] = v.to_s; acc }.to_yaml
+            inject({}) { |acc, (k,v)| acc[k.to_s] = v; acc }.to_yaml
         end
 
         File.open(File.join(tmpdir, 'hiera.yaml'), 'w') do |fh|
