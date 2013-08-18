@@ -39,6 +39,8 @@ module Kitchen
       validate_options(suite_name)
 
       @test_root = opts.fetch(:test_root, DEFAULT_TEST_ROOT)
+      @gem_bin = opts.fetch(:gem_bin, DEFAULT_GEM_BIN)
+      @busser_bin = opts.fetch(:busser_bin, DEFAULT_BUSSER_BIN)
       @suite_name = suite_name
       @use_sudo = opts.fetch(:use_sudo, true)
     end
@@ -56,11 +58,11 @@ module Kitchen
         nil
       else
         <<-INSTALL_CMD.gsub(/^ {10}/, '')
-          bash -c '
-          if ! #{sudo}#{ruby_binpath}/gem list busser -i >/dev/null ; then
-            #{sudo}#{ruby_binpath}/gem install #{busser_gem} --no-rdoc --no-ri
+          bash -l -c '
+          if ! #{sudo}#{gem_bin} list busser -i >/dev/null ; then
+            #{sudo}#{gem_bin} install #{busser_gem} --no-rdoc --no-ri
           fi
-          #{sudo}#{ruby_binpath}/busser setup
+          #{sudo}#{busser_bin} setup
           #{sudo}#{busser_bin} plugin install #{plugins.join(' ')}'
         INSTALL_CMD
       end
@@ -79,7 +81,7 @@ module Kitchen
         nil
       else
         <<-INSTALL_CMD.gsub(/^ {10}/, '')
-          bash -c '
+          bash -l -c '
           #{sudo}#{busser_bin} suite cleanup
           #{local_suite_files.map { |f| stream_file(f, remote_file(f, @suite_name)) }.join}
           #{helper_files.map { |f| stream_file(f, remote_file(f, "helpers")) }.join}'
@@ -100,8 +102,9 @@ module Kitchen
 
     private
 
-    DEFAULT_RUBY_BINPATH = "/opt/chef/embedded/bin".freeze
-    DEFAULT_BUSSER_ROOT = "/opt/busser".freeze
+    DEFAULT_RUBY_BIN = "/opt/chef/embedded/bin/ruby".freeze
+    DEFAULT_GEM_BIN = "/opt/chef/embedded/bin/gem".freeze
+    DEFAULT_BUSSER_BIN = "/opt/busser/bin/busser".freeze
     DEFAULT_TEST_ROOT = File.join(Dir.pwd, "test/integration").freeze
 
     attr_reader :test_root
@@ -162,12 +165,12 @@ module Kitchen
       @use_sudo ? "sudo -E " : ""
     end
 
-    def ruby_binpath
-      DEFAULT_RUBY_BINPATH
+    def gem_bin
+      @gem_bin
     end
 
     def busser_bin
-      File.join(DEFAULT_BUSSER_ROOT, "bin/busser")
+      @busser_bin
     end
 
     def busser_gem
