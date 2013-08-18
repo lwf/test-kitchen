@@ -126,7 +126,7 @@ module Kitchen
 
       def prepare_manifest
         File.open(File.join(tmpdir, 'base.pp'), 'w') do |fh|
-          fh.puts instance.classes.map { |i| "include #{i}" }.join('; ')
+          fh.puts "include #{instance.classes.join(', ')}"
         end
       end
 
