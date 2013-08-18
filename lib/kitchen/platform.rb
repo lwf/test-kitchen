@@ -58,6 +58,16 @@ module Kitchen
       end
     end
 
+    module Puppetlike
+      def classes
+        data[:classes]
+      end
+
+      def hiera
+        data[:hiera] || {}
+      end
+    end
+
     private
 
     attr_reader :data

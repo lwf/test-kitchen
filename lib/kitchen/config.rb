@@ -150,6 +150,7 @@ module Kitchen
     def extend_platform(platform, provisioner)
       case provisioner.to_s.downcase
       when /^chef_/ then platform.dup.extend(Platform::Cheflike)
+      when /^puppet_/ then platform.dup.extend(Platform::Puppetlike)
       else platform.dup
       end
     end

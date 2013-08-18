@@ -209,11 +209,11 @@ module Kitchen
     # node attributes, etc.
     module Puppetlike
       def hiera
-        suite.hiera
+        platform.hiera.rmerge suite.hiera
       end
 
       def classes
-        suite.classes
+        platform.classes + suite.classes
       end
     end
 
