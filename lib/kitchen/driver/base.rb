@@ -157,7 +157,7 @@ module Kitchen
         @busser ||= begin
           raise ClientError, "Instance must be set for Driver" if instance.nil?
 
-          Busser.new(instance.suite.name, :test_root => test_root)
+          Busser.new(instance.suite.name, config.merge(:test_root => test_root))
         end
       end
 

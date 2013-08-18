@@ -49,11 +49,11 @@ module Kitchen
       end
     end
 
-    def exec(cmd)
+    def exec(cmd, exit_codes=[0])
       logger.debug("[SSH] #{self} (#{cmd})")
       exit_code = exec_with_exit(cmd)
 
-      if exit_code != 0
+      unless exit_codes.include?(exit_code)
         raise SSHFailed, "SSH exited (#{exit_code}) for command: [#{cmd}]"
       end
     end

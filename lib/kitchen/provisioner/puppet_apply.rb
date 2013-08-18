@@ -52,9 +52,14 @@ module Kitchen
           sudo("puppet"),
           "apply",
           File.join(home_path, 'base.pp'),
+          "--detailed-exitcodes",
           "--modulepath=#{File.join(home_path, 'modules')}",
           "--hiera_config=#{File.join(home_path, 'hiera.yaml')}"
         ].join(" ")
+      end
+
+      def run_command_exit_codes
+        [0, 2]
       end
 
       def home_path

@@ -43,6 +43,10 @@ module Kitchen
 
       def run_command ; end
 
+      def run_command_exit_codes; 
+        [0]
+      end
+
       def cleanup_sandbox ; end
 
       def home_path ; end

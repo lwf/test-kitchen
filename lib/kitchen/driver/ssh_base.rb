@@ -43,7 +43,8 @@ module Kitchen
           run_remote(provisioner.init_command, conn)
           transfer_path(provisioner.create_sandbox, provisioner.home_path, conn)
           run_remote(provisioner.prepare_command, conn)
-          run_remote(provisioner.run_command, conn)
+          run_remote(provisioner.run_command, conn,
+            provisioner.run_command_exit_codes)
         end
       ensure
         provisioner && provisioner.cleanup_sandbox
@@ -106,10 +107,10 @@ module Kitchen
         env == "env" ? cmd : "#{env} #{cmd}"
       end
 
-      def run_remote(command, connection)
+      def run_remote(command, connection, exit_codes=[0])
         return if command.nil?
 
-        connection.exec(env_cmd(command))
+        connection.exec(env_cmd(command), exit_codes)
       rescue SSHFailed, Net::SSH::Exception => ex
         raise ActionFailed, ex.message
       end
