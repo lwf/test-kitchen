@@ -116,7 +116,7 @@ module Kitchen
             - yaml
 
           :hierarchy:
-            - common
+            - base
 
           :yaml:
             :datadir: #{File.join(home_path, 'hieradata')}
