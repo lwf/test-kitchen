@@ -155,7 +155,7 @@ module Kitchen
 
       <<-STREAMFILE.gsub(/^ {8}/, '')
         echo "Uploading #{remote_path} (mode=#{perms})"
-        #{sudo}cat <<"__EOFSTREAM__" | #{sudo}#{stream_cmd}
+        #{sudo}cat <<"__EOFSTREAM__" | #{stream_cmd}
         #{Base64.encode64(local_file)}
         __EOFSTREAM__
       STREAMFILE
