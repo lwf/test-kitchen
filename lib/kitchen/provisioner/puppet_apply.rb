@@ -97,13 +97,16 @@ module Kitchen
             " must exist in #{kitchen_root}")
           raise UserError, "Module(s) could not be found"
         end
+
+        filter_only_module_files
       end
 
       def prepare_hiera
         FileUtils.mkdir_p(File.join(tmpdir, 'hieradata'))
 
         File.open(File.join(tmpdir, 'hieradata', 'base.yaml'), 'w') do |fh|
-          fh.puts instance.hiera.to_yaml
+          fh.puts instance.hiera.
+            inject({}) { |acc, (k,v)| acc[k.to_s] = v.to_s; acc }.to_yaml
         end
 
         File.open(File.join(tmpdir, 'hiera.yaml'), 'w') do |fh|
@@ -168,6 +171,24 @@ module Kitchen
 
         FileUtils.mkdir_p(module_path)
         FileUtils.cp_r(glob, module_path)
+      end
+
+      def filter_only_module_files
+        info("Removing non-module files in sandbox")
+
+        all_files = Dir.glob(File.join(tmpmodule_dir, "**/*")).
+          select { |fn| File.file?(fn) }
+        module_files = Dir.glob(File.join(tmpmodule_dir, module_files_glob)).
+          select { |fn| File.file?(fn) }
+
+        FileUtils.rm(all_files - module_files)
+      end
+
+      def module_files_glob 
+        files = %w{README.* Modulefile
+          manifests/**/* templates/**/* files/**/* lib/**/*}
+
+        "*/{#{files.join(',')}}"
       end
 
       def resolve_with_librarian
