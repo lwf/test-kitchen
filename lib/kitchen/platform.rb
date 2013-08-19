@@ -60,7 +60,7 @@ module Kitchen
 
     module Puppetlike
       def classes
-        data[:classes]
+        data[:classes] || []
       end
 
       def hiera
