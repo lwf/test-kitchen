@@ -39,7 +39,7 @@ module Kitchen
       def initialize(config = {})
         @config = LazyDriverHash.new(config, self)
         self.class.defaults.each do |attr, value|
-          @config[attr] = value unless @config[attr]
+          @config[attr] = value unless @config.has_key?(attr)
         end
       end
 
@@ -62,6 +62,13 @@ module Kitchen
       # @return [Object] value at configuration key
       def [](attr)
         config[attr]
+      end
+
+      # Returns an array of configuration keys.
+      #
+      # @return [Array] array of configuration keys
+      def config_keys
+        config.keys
       end
 
       # Creates an instance.
@@ -227,6 +234,12 @@ module Kitchen
           else
             proc_or_val
           end
+        end
+
+        def to_hash
+          hash = Hash.new
+          __getobj__.keys.each { |key| hash[key] = self[key] }
+          hash
         end
       end
     end
