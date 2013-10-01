@@ -182,8 +182,8 @@ module Kitchen
       def filter_only_module_files
         info("Removing non-module files in sandbox")
 
-        all_files = Dir.glob(File.join(tmpmodule_dir, "**/*")).
-          select { |fn| File.file?(fn) }
+        all_files = Dir.glob(File.join(tmpmodule_dir, "**/*"), File::FNM_DOTMATCH).
+          select { |fn| File.file?(fn) and File.basename(fn) != '.' and File.basename(fn) != '..' }
         module_files = Dir.glob(File.join(tmpmodule_dir, module_files_glob)).
           select { |fn| File.file?(fn) }
 
