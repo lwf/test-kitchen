@@ -79,6 +79,7 @@ module Kitchen
 
       def create_chef_sandbox
         @tmpdir = Dir.mktmpdir("#{instance.name}-sandbox-")
+        File.chmod(0755, @tmpdir)
         debug("Creating local sandbox in #{tmpdir}")
 
         yield if block_given?
@@ -251,7 +252,7 @@ module Kitchen
         begin
           require 'berkshelf'
         rescue LoadError
-          fatal("The `berkself' gem is missing and must be installed." +
+          fatal("The `berkshelf' gem is missing and must be installed." +
             " Run `gem install berkshelf` or add the following " +
             "to your Gemfile if you are using Bundler: `gem 'berkshelf'`.")
           raise UserError, "Could not load Berkshelf"
